@@ -9,7 +9,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback {
 
-    private DrawThread drawThread;
+    DrawThread drawThread;
 
     public MySurfaceView(Context context) {
         super(context);
@@ -17,28 +17,35 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        drawThread = new DrawThread(getContext(), getHolder());
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        drawThread = new DrawThread(getContext(), surfaceHolder);
         drawThread.start();
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        drawThread.requestStop();
-        boolean retry = true;
-        while (retry) {
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        drawThread.stopRequest();
+        boolean retry =true;
+        while (retry){
             try {
                 drawThread.join();
-                retry = false;
             } catch (InterruptedException e) {
-
+                e.printStackTrace();
             }
 
-            }
-       
-    }}
+            retry = false;
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        drawThread.setXY((int) event.getX(), (int) event.getY());
+
+        return true;
+    }
+}
