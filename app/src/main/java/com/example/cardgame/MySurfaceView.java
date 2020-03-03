@@ -46,6 +46,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     public boolean onTouchEvent(MotionEvent event) {
         drawThread.setXY((int) event.getX(), (int) event.getY());
 
+
         return true;
     }
 }

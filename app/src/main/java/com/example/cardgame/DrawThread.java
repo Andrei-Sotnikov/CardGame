@@ -29,10 +29,12 @@ public class DrawThread extends Thread {
     int height;
     float scaledWidth ;
     float scaledHeight;
+    Bitmap cards[];
 
     Bitmap output;
 
     Matrix matrix;
+    int count = 0;
 
 
     public DrawThread(Context context, SurfaceHolder surfaceHolder, Resources resources){
@@ -45,21 +47,18 @@ public class DrawThread extends Thread {
         backPaint = new Paint();
         backPaint.setStyle(Paint.Style.FILL);
         backPaint.setColor(Color.BLACK);
-// path = new Path();
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.RED);
         card = BitmapFactory.decodeResource(resources, R.drawable.card);
-//image.setImageBitmap(card);
-//rect.contains(30,60,200,200);
         width = card.getWidth();
         height = card.getHeight();
         scaledWidth = width * .7f;
         scaledHeight = height * .7f;
         matrix = new Matrix();
-//matrix.setRectToRect(new RectF(0, 0, card.getWidth(), card.getHeight()),new RectF(0,0,scaledWidth,scaledHeight),Matrix.ScaleToFit.FILL);
+        cards = new Bitmap[3];
 
-// output = Bitmap.createBitmap(card, 0, 0, , card.getHeight(), matrix, true);
+
 
 
 
@@ -84,19 +83,21 @@ public class DrawThread extends Thread {
             if(canvas != null){
                 try{
                     canvas.drawPaint(backPaint);
-// canvas.drawBitmap(card,x,y,null);
-//canvas.drawCircle(x, y, r, paint);
+
                     matrix.setRectToRect(new RectF(0, 0, card.getWidth(), card.getHeight()),new RectF(0,0,canvas.getWidth()/6,canvas.getHeight()/3),Matrix.ScaleToFit.FILL);
                     output = Bitmap.createBitmap(card, 0, 0, card.getWidth() ,card.getHeight() , matrix, true);
-                    canvas.drawBitmap(output , canvas.getWidth()/2-((canvas.getWidth()/6)/2) , canvas.getHeight()-(canvas.getHeight()/3) , null);
 
-// matrix.setRotate(90,x,y);
-// path.transform(matrix);
-
-// matrix.setTranslate(x-210,y-130);
-
-// canvas.drawBitmap(card,matrix,paint);
-
+                    for (int i = 0; i < 3; i++) {
+                        cards[i] = output;
+                    }
+                    if (count == 1){
+                        canvas.drawBitmap(cards[1] , canvas.getWidth()/2-((canvas.getWidth()/6)/2) , canvas.getHeight()-(canvas.getHeight()/3) , null);
+                    }
+                    if (count == 2){
+                        canvas.drawBitmap(cards[1] , canvas.getWidth()/2+((canvas.getWidth()/20)) , canvas.getHeight()-(canvas.getHeight()/3) , null);
+                        canvas.drawBitmap(cards[1] , canvas.getWidth()/2-((canvas.getWidth()/6)) , canvas.getHeight()-(canvas.getHeight()/3) , null);
+                    }
+                    if (count == 3){}
 
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
